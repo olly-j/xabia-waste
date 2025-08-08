@@ -496,6 +496,30 @@ function getStatuses(at) {
   return { summer, statuses };
 }
 
+function addInfoIcon(ul) {
+  // Remove existing info icon if it exists
+  const existingInfo = ul.parentNode.querySelector('.info-icon-container');
+  if (existingInfo) {
+    existingInfo.remove();
+  }
+  
+  // Create info icon container
+  const infoContainer = document.createElement('div');
+  infoContainer.className = 'info-icon-container';
+  infoContainer.innerHTML = `
+    <a href="https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/" 
+       target="_blank" rel="noopener noreferrer" class="info-icon-link">
+      <svg class="info-icon" aria-hidden="true" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+      </svg>
+      <span class="info-text">${t('more_details')}</span>
+    </a>
+  `;
+  
+  // Insert after the waste list
+  ul.parentNode.appendChild(infoContainer);
+}
+
 function t(key) {
   const translation = I18N[state.lang]?.[key] || I18N['en']?.[key] || key;
   console.log(`Translation for "${key}" in "${state.lang}":`, translation);
