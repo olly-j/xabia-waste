@@ -46,6 +46,175 @@ function trackInstallAttempt(outcome) {
   trackEvent('PWA', 'install_attempt', outcome);
 }
 
+// Amazon Associates Integration
+class AmazonAssociates {
+  constructor() {
+    this.associateTag = 'ollyj0a-21'; // Amazon.es Associates ID
+    this.products = this.getRelevantProducts();
+    this.init();
+  }
+
+  init() {
+    this.renderProductRecommendations();
+  }
+
+  getRelevantProducts() {
+    return {
+      organic: [
+        {
+          name: 'Bokashi Composting Bin',
+          asin: 'B08XXXXX',
+          price: '€89.99',
+          image: 'https://m.media-amazon.com/images/I/71...',
+          description: 'Perfect for kitchen composting'
+        },
+        {
+          name: 'Kitchen Compost Bin',
+          asin: 'B08YYYYY',
+          price: '€45.99',
+          image: 'https://m.media-amazon.com/images/I/72...',
+          description: 'Small countertop composting'
+        }
+      ],
+      recyclables: [
+        {
+          name: 'Recycling Sorting System',
+          asin: 'B08ZZZZZ',
+          price: '€65.99',
+          image: 'https://m.media-amazon.com/images/I/73...',
+          description: 'Organize your recycling easily'
+        }
+      ],
+      general: [
+        {
+          name: 'Waste Reduction Guide',
+          asin: 'B09AAAAA',
+          price: '€12.99',
+          image: 'https://m.media-amazon.com/images/I/74...',
+          description: 'Learn to reduce household waste'
+        }
+      ]
+    };
+  }
+
+  renderProductRecommendations() {
+    const productGrid = document.getElementById('product-grid');
+    if (!productGrid) return;
+
+    // Show relevant products based on current waste status
+    const wasteItems = document.querySelectorAll('.waste-item');
+    const relevantProducts = [];
+
+    wasteItems.forEach(item => {
+      const wasteType = this.getWasteType(item);
+      const products = this.products[wasteType] || this.products.general;
+      relevantProducts.push(...products);
+    });
+
+    // Remove duplicates and show top 3 products
+    const uniqueProducts = [...new Set(relevantProducts.map(p => p.asin))].map(asin => 
+      relevantProducts.find(p => p.asin === asin)
+    ).slice(0, 3);
+
+    uniqueProducts.forEach(product => {
+      this.addProductCard(productGrid, product);
+    });
+  }
+
+  getWasteType(item) {
+    const text = item.textContent.toLowerCase();
+    if (text.includes('organic') || text.includes('orgánica')) return 'organic';
+    if (text.includes('recycl') || text.includes('recicl')) return 'recyclables';
+    return 'general';
+  }
+
+  addProductCard(container, product) {
+    const productCard = document.createElement('div');
+    productCard.className = 'product-card';
+    productCard.innerHTML = `
+      <img src="${product.image}" alt="${product.name}" />
+      <div class="product-info">
+        <h4>${product.name}</h4>
+        <p>${product.description}</p>
+        <div class="product-price">${product.price}</div>
+        <a href="https://amazon.es/dp/${product.asin}?tag=${this.associateTag}" 
+           class="product-btn" target="_blank" rel="noopener">
+          View on Amazon
+        </a>
+      </div>
+    `;
+    
+    // Track affiliate clicks
+    productCard.querySelector('.product-btn').addEventListener('click', () => {
+      trackEvent('Affiliate', 'amazon_click', product.asin);
+    });
+    
+    container.appendChild(productCard);
+  }
+}
+
+// Revenue Tracking
+class RevenueTracker {
+  constructor() {
+    this.stats = {
+      pageViews: 0,
+      adClicks: 0,
+      affiliateClicks: 0,
+      estimatedRevenue: 0
+    };
+    this.init();
+  }
+
+  init() {
+    this.trackPageViews();
+    this.trackAdClicks();
+    this.trackAffiliateClicks();
+  }
+
+  trackPageViews() {
+    this.stats.pageViews++;
+    trackEvent('Revenue', 'page_view', this.stats.pageViews);
+  }
+
+  trackAdClicks() {
+    // Track AdSense clicks
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'ad_click', {
+        event_category: 'Revenue',
+        event_label: 'adsense'
+      });
+    }
+  }
+
+  trackAffiliateClicks() {
+    document.querySelectorAll('.product-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.stats.affiliateClicks++;
+        trackEvent('Revenue', 'affiliate_click', this.stats.affiliateClicks);
+      });
+    });
+  }
+
+  calculateRevenue() {
+    const adRevenue = this.stats.pageViews * 0.003; // €3 per 1000 views
+    const affiliateRevenue = this.stats.affiliateClicks * 5; // €5 per click
+    
+    this.stats.estimatedRevenue = adRevenue + affiliateRevenue;
+    
+    console.log('Revenue Stats:', {
+      pageViews: this.stats.pageViews,
+      adRevenue: adRevenue.toFixed(2),
+      affiliateRevenue: affiliateRevenue.toFixed(2),
+      total: this.stats.estimatedRevenue.toFixed(2)
+    });
+    
+    return this.stats.estimatedRevenue;
+  }
+}
+
+// Initialize revenue tracking
+const revenueTracker = new RevenueTracker();
+
 // SEO: Update page title and meta description dynamically
 function updatePageSEO(timeInfo, language) {
   const timeStr = formatTimeHHMM(timeInfo);
@@ -474,7 +643,6 @@ function renderWasteList(at) {
       <div class="item-left">
         <svg class="icon" aria-hidden="true"><use href="#${wasteIconId(s.type)}"></use></svg>
         <span class="waste-name">${translateWasteLabel(wasteLabel(s.type))}</span>
-        <a class="details-link" href="${DETAILS_URL[s.type]}" target="_blank" rel="noopener noreferrer">${t('more_details')}</a>
       </div>
       <span class="badge-status ${cls}">${label}</span>
     `;
@@ -485,6 +653,11 @@ function renderWasteList(at) {
   }
   
   console.log('Waste list rendered with', statuses.length, 'items');
+  
+  // Re-render product recommendations after waste list updates
+  if (window.amazonAssociates) {
+    window.amazonAssociates.renderProductRecommendations();
+  }
 }
 
 function updateTimeDisplay(at) {
@@ -583,8 +756,8 @@ function checkFirstVisit() {
   }
 }
 
-// Initial
-console.log('Initializing Xàbia Waste app...');
+// Initialize Amazon Associates
+window.amazonAssociates = new AmazonAssociates();
 
 // Simple initialization that runs immediately
 function initializeApp() {
