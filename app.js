@@ -272,7 +272,7 @@ function showIOSInstallPrompt() {
         </svg>
       </div>
       <h3>Add to Home Screen</h3>
-      <p>Tap the share button <span class="share-icon">⎋</span> then "Add to Home Screen"</p>
+      <p>Tap the share button <svg class="share-icon" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zM20 10v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg> then "Add to Home Screen"</p>
       <button class="ios-install-close">Got it</button>
     </div>
   `;
@@ -298,15 +298,22 @@ function showIOSInstallPrompt() {
 }
 
 async function handleInstallClick() {
-  if (deferredPrompt) {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+  
+  if (isIOS && isSafari) {
+    // iOS Safari - show custom prompt
+    showIOSInstallPrompt();
+  } else if (deferredPrompt) {
+    // Android/Desktop - use native prompt
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     console.log(`User response to the install prompt: ${outcome}`);
     deferredPrompt = null;
     if (installButton) installButton.style.display = 'none';
   } else {
-    // Fallback for iOS Safari
-    handleIOSInstall();
+    // Fallback for other browsers
+    showIOSInstallPrompt();
   }
 }
 
@@ -768,23 +775,43 @@ if (timeSlider) {
   console.error('Time slider element not found');
 }
 
-// Show iOS install prompt on first visit
-function checkFirstVisit() {
-  const hasVisited = localStorage.getItem('hasVisited');
-  if (!hasVisited) {
-    localStorage.setItem('hasVisited', 'true');
-    setTimeout(() => {
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-      if (isIOS && isSafari) {
-        showIOSInstallPrompt();
-      }
-    }, 2000); // Show after 2 seconds
-  }
+// Show iOS install prompt on every load
+function checkIOSInstall() {
+  setTimeout(() => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+    if (isIOS && isSafari) {
+      showIOSInstallPrompt();
+    }
+  }, 2000); // Show after 2 seconds
 }
 
 // Initialize Amazon Associates
 window.amazonAssociates = new AmazonAssociates();
+
+// Accordion functionality
+function initAccordion() {
+  const accordionItems = document.querySelectorAll('.accordion-item');
+  
+  accordionItems.forEach(item => {
+    const header = item.querySelector('.accordion-header');
+    const content = item.querySelector('.accordion-content');
+    
+    header.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+      
+      // Close all other items
+      accordionItems.forEach(otherItem => {
+        otherItem.classList.remove('active');
+      });
+      
+      // Toggle current item
+      if (!isActive) {
+        item.classList.add('active');
+      }
+    });
+  });
+}
 
 // Simple initialization that runs immediately
 function initializeApp() {
@@ -806,7 +833,8 @@ function initializeApp() {
   if (timeElement && dateElement && sliderElement && wasteListElement) {
     applyI18n();
     updateAll();
-    checkFirstVisit();
+    checkIOSInstall();
+    initAccordion();
     console.log('Initialization complete');
   } else {
     console.error('Some elements not found, retrying in 100ms...');
