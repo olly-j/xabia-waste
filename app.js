@@ -218,11 +218,11 @@ const I18N = {
     season_summer: 'Sommer',
     season_winter: 'Winter',
     status_allowed: 'Erlaubt',
-    status_not_allowed: 'Nicht erlaubt',
-    status_check: 'Stunden prüfen',
-    status_always: 'Immer erlaubt',
+    status_not_allowed: 'Verboten',
+    status_check: 'Prüfen',
+    status_always: 'Immer',
     preview: 'Vorschau',
-    more_details: 'Weitere Details',
+    more_details: 'Details',
     today_label: 'Heute',
     tomorrow_label: 'Morgen',
     yesterday_label: 'Gestern',
@@ -238,11 +238,11 @@ const I18N = {
     season_summer: 'Été',
     season_winter: 'Hiver',
     status_allowed: 'Autorisé',
-    status_not_allowed: 'Non autorisé',
-    status_check: 'Vérifier les heures',
-    status_always: 'Toujours autorisé',
+    status_not_allowed: 'Interdit',
+    status_check: 'Vérifier',
+    status_always: 'Toujours',
     preview: 'Aperçu',
-    more_details: 'Plus de détails',
+    more_details: 'Détails',
     today_label: 'Aujourd\'hui',
     tomorrow_label: 'Demain',
     yesterday_label: 'Hier',
@@ -258,11 +258,11 @@ const I18N = {
     season_summer: 'Zomer',
     season_winter: 'Winter',
     status_allowed: 'Toegestaan',
-    status_not_allowed: 'Niet toegestaan',
-    status_check: 'Controleer uren',
-    status_always: 'Altijd toegestaan',
+    status_not_allowed: 'Verboden',
+    status_check: 'Controleren',
+    status_always: 'Altijd',
     preview: 'Voorvertoning',
-    more_details: 'Meer details',
+    more_details: 'Details',
     today_label: 'Vandaag',
     tomorrow_label: 'Morgen',
     yesterday_label: 'Gisteren',
@@ -328,7 +328,9 @@ function getStatuses(at) {
 }
 
 function t(key) {
-  return I18N[state.lang][key] || key;
+  const translation = I18N[state.lang]?.[key] || I18N['en']?.[key] || key;
+  console.log(`Translation for "${key}" in "${state.lang}":`, translation);
+  return translation;
 }
 
 function formatTimeHHMM(d) {
@@ -412,8 +414,29 @@ function translateWasteLabel(label) {
       Recyclables: 'Reciclables',
       'Bulky Items': 'Voluminosos/Ecoparc',
     },
+    de: {
+      Organic: 'Bioabfall',
+      'Other Waste': 'Restmüll',
+      Glass: 'Glas',
+      Recyclables: 'Recycelbar',
+      'Bulky Items': 'Sperrmüll/Ecoparc',
+    },
+    fr: {
+      Organic: 'Organique',
+      'Other Waste': 'Déchets résiduels',
+      Glass: 'Verre',
+      Recyclables: 'Recyclables',
+      'Bulky Items': 'Encombrants/Ecoparc',
+    },
+    nl: {
+      Organic: 'GFT',
+      'Other Waste': 'Restafval',
+      Glass: 'Glas',
+      Recyclables: 'Recyclebaar',
+      'Bulky Items': 'Grofvuil/Ecoparc',
+    },
   };
-  return map[lang][label] || label;
+  return map[lang]?.[label] || map['en']?.[label] || label;
 }
 
 // Official source links for details per waste type
@@ -426,14 +449,25 @@ const DETAILS_URL = {
 };
 
 function renderWasteList(at) {
+  console.log('renderWasteList called with time:', at);
   const { summer, statuses } = getStatuses(at);
+  console.log('Summer season:', summer);
+  console.log('Waste statuses:', statuses);
+  
   renderSeasonBadge(summer);
   
   const ul = document.getElementById('waste-list');
+  if (!ul) {
+    console.error('Waste list element not found');
+    return;
+  }
+  
   ul.innerHTML = '';
   
   for (const s of statuses) {
     const { cls, label } = statusBadgeProps(s);
+    console.log('Rendering waste item:', s.type, 'with status:', label);
+    
     const li = document.createElement('li');
     li.className = 'waste-item';
     li.innerHTML = `
@@ -445,29 +479,53 @@ function renderWasteList(at) {
       <span class="badge-status ${cls}">${label}</span>
     `;
     ul.appendChild(li);
+    
+    // Track waste status view
+    trackWasteStatusView(label, s.type);
   }
+  
+  console.log('Waste list rendered with', statuses.length, 'items');
 }
 
 function updateTimeDisplay(at) {
-  document.getElementById('current-time').textContent = formatTimeHHMM(at);
-  document.getElementById('current-date').textContent = formatDate(at);
+  const timeElement = document.getElementById('current-time');
+  const dateElement = document.getElementById('current-date');
+  
+  if (timeElement && dateElement) {
+    timeElement.textContent = formatTimeHHMM(at);
+    dateElement.textContent = formatDate(at);
+  }
 }
 
 function getCurrentTimeFromSlider() {
-  const sliderValue = Number(document.getElementById('time-slider').value);
+  const slider = document.getElementById('time-slider');
+  if (!slider) return new Date();
+  
+  const sliderValue = Number(slider.value);
   const now = new Date();
   // Each step is 15 minutes, so multiply by 15 * 60 * 1000 milliseconds
   return new Date(now.getTime() + sliderValue * 15 * 60 * 1000);
 }
 
 function updateAll() {
+  console.log('updateAll called');
   const currentTime = getCurrentTimeFromSlider();
+  console.log('Current time from slider:', currentTime);
+  console.log('Formatted time:', formatTimeHHMM(currentTime));
+  console.log('Formatted date:', formatDate(currentTime));
+  
   updateTimeDisplay(currentTime);
   renderWasteList(currentTime);
+  
+  // Track time slider usage
+  const slider = document.getElementById('time-slider');
+  if (slider) {
+    trackTimeSliderUsage(slider.value);
+  }
 }
 
 const state = {
-  lang: (localStorage.getItem('lang') || (navigator.language?.slice(0,2) ?? 'en')).replace(/^(en|es|va|de|fr|nl).*/, '$1'),
+  lang: (localStorage.getItem('lang') || (navigator.language?.slice(0,2) ?? 'en')).replace(/^(en|es|va|de|fr|nl).*/, '$1') || 'en',
 };
 
 function applyI18n() {
@@ -497,7 +555,18 @@ document.querySelectorAll('.lang-toggle .chip').forEach((btn) => {
   });
 });
 
-document.getElementById('time-slider').addEventListener('input', updateAll);
+// Time slider event listener
+const timeSlider = document.getElementById('time-slider');
+if (timeSlider) {
+  console.log('Time slider found, attaching event listener...');
+  timeSlider.addEventListener('input', function() {
+    console.log('Slider value changed to:', this.value);
+    updateAll();
+  });
+  console.log('Time slider event listener attached');
+} else {
+  console.error('Time slider element not found');
+}
 
 // Show iOS install prompt on first visit
 function checkFirstVisit() {
@@ -515,8 +584,37 @@ function checkFirstVisit() {
 }
 
 // Initial
-applyI18n();
-updateAll();
-checkFirstVisit();
+console.log('Initializing Xàbia Waste app...');
+
+// Simple initialization that runs immediately
+function initializeApp() {
+  console.log('Starting app initialization...');
+  
+  // Check if elements exist
+  const timeElement = document.getElementById('current-time');
+  const dateElement = document.getElementById('current-date');
+  const sliderElement = document.getElementById('time-slider');
+  const wasteListElement = document.getElementById('waste-list');
+  
+  console.log('Elements found:', {
+    timeElement: !!timeElement,
+    dateElement: !!dateElement,
+    sliderElement: !!sliderElement,
+    wasteListElement: !!wasteListElement
+  });
+  
+  if (timeElement && dateElement && sliderElement && wasteListElement) {
+    applyI18n();
+    updateAll();
+    checkFirstVisit();
+    console.log('Initialization complete');
+  } else {
+    console.error('Some elements not found, retrying in 100ms...');
+    setTimeout(initializeApp, 100);
+  }
+}
+
+// Run initialization
+initializeApp();
 
 
