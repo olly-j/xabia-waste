@@ -973,6 +973,7 @@ function initAccordion() {
 function toggleLocationInfo() {
   const locationInfo = document.querySelector('.location-info');
   const expandedContent = document.querySelector('.location-expanded');
+  const continuedText = document.querySelector('.location-text-continued');
   const showMoreBtn = document.querySelector('.show-more-btn');
   const showMoreText = document.querySelector('.show-more-text');
   const showMoreArrow = document.querySelector('.show-more-arrow');
@@ -982,11 +983,13 @@ function toggleLocationInfo() {
   if (isExpanded) {
     locationInfo.classList.remove('expanded');
     expandedContent.style.display = 'none';
-    showMoreText.textContent = 'Show more';
+    continuedText.style.display = 'none';
+    showMoreText.textContent = t('show_more');
   } else {
     locationInfo.classList.add('expanded');
     expandedContent.style.display = 'block';
-    showMoreText.textContent = 'Show less';
+    continuedText.style.display = 'inline';
+    showMoreText.textContent = t('show_less');
   }
 }
 

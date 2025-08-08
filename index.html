@@ -354,8 +354,16 @@
               <div class="location-content">
                 <p data-i18n="about_xabia_desc">
                   Xàbia (Valencian) or Javea (Spanish) is a coastal municipality in the Marina Alta region of Alicante, Spain. 
-                  With a population of over 27,000 residents and a significant international community, the town has implemented 
-                  strict waste management regulations to maintain its beautiful Mediterranean environment and comply with EU recycling targets.
+                  <button class="show-more-btn" onclick="toggleLocationInfo()">
+                    <span class="show-more-text" data-i18n="show_more">Show more</span>
+                    <svg class="show-more-arrow" viewBox="0 0 24 24" width="16" height="16">
+                      <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+                    </svg>
+                  </button>
+                  <span class="location-text-continued" style="display: none;">
+                    With a population of over 27,000 residents and a significant international community, the town has implemented 
+                    strict waste management regulations to maintain its beautiful Mediterranean environment and comply with EU recycling targets.
+                  </span>
                 </p>
                 <div class="location-expanded" style="display: none;">
                   <p data-i18n="about_xabia_expanded">
@@ -363,38 +371,72 @@
                     environmental impact and ensure efficient collection services for residents and visitors alike.
                   </p>
                 </div>
-                <button class="show-more-btn" onclick="toggleLocationInfo()">
-                  <span class="show-more-text" data-i18n="show_more">Show more</span>
-                  <svg class="show-more-arrow" viewBox="0 0 24 24" width="16" height="16">
-                    <path fill="currentColor" d="M7 10l5 5 5-5z"/>
-                  </svg>
-                </button>
               </div>
             </div>
           </div>
         </section>
 
-        <section class="time-control" id="waste-tool">
-          <div class="time-display">
-            <span id="current-time" class="time-large">00:00</span>
-            <span id="current-date" class="date-small">Today</span>
-          </div>
-          <div class="slider-container">
-            <input id="time-slider" type="range" min="-96" max="96" value="0" step="1" />
-            <div class="slider-labels">
-              <span>-24h</span>
-              <span>Now</span>
-              <span>+24h</span>
+        <div class="content-container">
+          <section class="time-control" id="waste-tool">
+            <div class="time-display">
+              <span id="current-time" class="time-large">00:00</span>
+              <span id="current-date" class="date-small">Today</span>
             </div>
-          </div>
-        </section>
+            <div class="slider-container">
+              <input id="time-slider" type="range" min="-96" max="96" value="0" step="1" />
+              <div class="slider-labels">
+                <span>-24h</span>
+                <span>Now</span>
+                <span>+24h</span>
+              </div>
+            </div>
+          </section>
 
-        <!-- Top Ad Placement - High visibility, non-intrusive -->
-        <div class="ad-container ad-top">
+          <!-- Top Ad Placement - High visibility, non-intrusive -->
+          <div class="ad-container ad-top">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3784314933458462"
+                 data-ad-slot="YOUR_AD_SLOT_1"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+               (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+
+          <section class="waste-status">
+            <ul class="waste-list" id="waste-list"></ul>
+          </section>
+
+          <!-- Middle Ad Placement - After waste status, high engagement -->
+          <div class="ad-container ad-middle">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3784314933458462"
+                 data-ad-slot="YOUR_AD_SLOT_2"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+               (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
+
+          <!-- Amazon Associates Product Recommendations -->
+          <section class="product-recommendations">
+            <h3>Eco-Friendly Waste Solutions</h3>
+            <div class="product-grid" id="product-grid">
+              <!-- Products will be dynamically loaded here -->
+            </div>
+          </section>
+        </div>
+
+        <!-- Bottom Ad Placement - Before footer, good for mobile -->
+        <div class="ad-container ad-bottom">
           <ins class="adsbygoogle"
                style="display:block"
                data-ad-client="ca-pub-3784314933458462"
-               data-ad-slot="YOUR_AD_SLOT_1"
+               data-ad-slot="YOUR_AD_SLOT_3"
                data-ad-format="auto"
                data-full-width-responsive="true"></ins>
           <script>
@@ -402,56 +444,18 @@
           </script>
         </div>
 
-        <section class="waste-status">
-          <ul class="waste-list" id="waste-list"></ul>
-        </section>
-
-        <!-- Middle Ad Placement - After waste status, high engagement -->
-        <div class="ad-container ad-middle">
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-3784314933458462"
-               data-ad-slot="YOUR_AD_SLOT_2"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-          <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-        </div>
-
-        <!-- Amazon Associates Product Recommendations -->
-        <section class="product-recommendations">
-          <h3>Eco-Friendly Waste Solutions</h3>
-          <div class="product-grid" id="product-grid">
-            <!-- Products will be dynamically loaded here -->
-          </div>
-        </section>
+        <footer class="app-footer">
+          <p id="legal" class="legal" data-i18n="legal">Respect municipal rules. Fines apply for violations.</p>
+          <p class="source">
+            <span data-i18n="sources">Sources</span>: 
+            <a href="https://www.ajxabia.com/ver/1282/ecoparc.html" target="_blank" rel="noopener">ajxabia.com</a> · 
+            <a href="https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/" target="_blank" rel="noopener">javea.com</a>
+          </p>
+          <p class="designer-credit">
+            Designed by <a href="https://github.com/oliverjeffers" target="_blank" rel="noopener">Olly Jeffers</a>
+          </p>
+        </footer>
       </main>
-
-      <!-- Bottom Ad Placement - Before footer, good for mobile -->
-      <div class="ad-container ad-bottom">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-3784314933458462"
-             data-ad-slot="YOUR_AD_SLOT_3"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-
-      <footer class="app-footer">
-        <p id="legal" class="legal" data-i18n="legal">Respect municipal rules. Fines apply for violations.</p>
-        <p class="source">
-          <span data-i18n="sources">Sources</span>: 
-          <a href="https://www.ajxabia.com/ver/1282/ecoparc.html" target="_blank" rel="noopener">ajxabia.com</a> · 
-          <a href="https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/" target="_blank" rel="noopener">javea.com</a>
-        </p>
-        <p class="designer-credit">
-          Designed by <a href="https://github.com/oliverjeffers" target="_blank" rel="noopener">Olly Jeffers</a>
-        </p>
-      </footer>
     </div>
 
     <script src="./app.js"></script>
