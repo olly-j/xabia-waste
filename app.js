@@ -271,9 +271,9 @@ function showIOSInstallPrompt() {
           <path d="M12 2v10.6l3.3-3.3l1.4 1.4L12 16.4L7.3 10.7l1.4-1.4L12 12.6V2h0ZM5 20h14v2H5v-2Z"/>
         </svg>
       </div>
-      <h3>Add to Home Screen</h3>
-      <p>Tap the share button <svg class="share-icon" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zM20 10v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg> then "Add to Home Screen"</p>
-      <button class="ios-install-close">Got it</button>
+      <h3 data-i18n="add_to_home">Add to Home Screen</h3>
+      <p data-i18n="ios_install_hint">Get the full experience with offline access, instant updates, and quick access to waste schedules. Tap the share button <svg class="share-icon" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M16 5l-1.42 1.42-1.59-1.59V16h-1.98V4.83L9.42 6.42 8 5l4-4 4 4zM20 10v11c0 1.1-.9 2-2 2H6c-1.11 0-2-.9-2-2V10c0-1.11.89-2 2-2h3v2H6v11h12V10h-3V8h3c1.1 0 2 .89 2 2z"/></svg> then "Add to Home Screen"</p>
+      <button class="ios-install-close" data-i18n="got_it">Got it</button>
     </div>
   `;
   
@@ -343,7 +343,7 @@ const I18N = {
     tomorrow_label: 'Tomorrow',
     yesterday_label: 'Yesterday',
     add_to_home: 'Add to Home Screen',
-    ios_install_hint: 'Tap the share button then "Add to Home Screen"',
+    ios_install_hint: 'Get the full experience with offline access, instant updates, and quick access to waste schedules. Tap the share button then "Add to Home Screen"',
     got_it: 'Got it',
     hero_title: 'Smart Waste Management for Xàbia/Javea',
     hero_description: 'Never miss your waste disposal times again. This app provides real-time information about when you can put different types of waste in their respective communal bins in Xàbia/Javea, helping you avoid fines and contribute to a cleaner environment.',
@@ -389,7 +389,7 @@ const I18N = {
     tomorrow_label: 'Mañana',
     yesterday_label: 'Ayer',
     add_to_home: 'Añadir a Pantalla de Inicio',
-    ios_install_hint: 'Toca el botón compartir y luego "Añadir a Pantalla de Inicio"',
+    ios_install_hint: 'Obtén la experiencia completa con acceso offline, actualizaciones instantáneas y acceso rápido a los horarios de residuos. Toca el botón compartir y luego "Añadir a Pantalla de Inicio"',
     got_it: 'Entendido',
     hero_title: 'Gestión Inteligente de Residuos para Xàbia/Javea',
     hero_description: 'Nunca más te pierdas los horarios de eliminación de residuos. Esta aplicación proporciona información en tiempo real sobre cuándo puedes depositar diferentes tipos de residuos en sus respectivos contenedores comunales en Xàbia/Javea, ayudándote a evitar multas y contribuir a un medio ambiente más limpio.',
@@ -435,7 +435,7 @@ const I18N = {
     tomorrow_label: 'Demà',
     yesterday_label: 'Ahir',
     add_to_home: 'Afegir a Pantalla d\'Inici',
-    ios_install_hint: 'Toca el botó compartir i després "Afegir a Pantalla d\'Inici"',
+    ios_install_hint: 'Obten l\'experiència completa amb accés offline, actualitzacions instantànies i accés ràpid als horaris de residus. Toca el botó compartir i després "Afegir a Pantalla d\'Inici"',
     got_it: 'Entès',
     hero_title: 'Gestió Intel·ligent de Residus per a Xàbia/Javea',
     hero_description: 'Mai més et perdis els horaris d\'eliminació de residus. Aquesta aplicació proporciona informació en temps real sobre quan pots dipositar diferents tipus de residus en les seues respectives contenidors comunals a Xàbia/Javea, ajudant-te a evitar multes i contribuir a un medi ambient més net.',
@@ -481,7 +481,7 @@ const I18N = {
     tomorrow_label: 'Morgen',
     yesterday_label: 'Gestern',
     add_to_home: 'Zum Startbildschirm hinzufügen',
-    ios_install_hint: 'Tippen Sie auf die Teilen-Schaltfläche und dann "Zum Startbildschirm hinzufügen"',
+    ios_install_hint: 'Erhalten Sie die vollständige Erfahrung mit Offline-Zugang, sofortigen Updates und schnellem Zugriff auf Abfallpläne. Tippen Sie auf die Teilen-Schaltfläche und dann "Zum Startbildschirm hinzufügen"',
     got_it: 'Verstanden',
     hero_title: 'Intelligente Abfallbewirtschaftung für Xàbia/Javea',
     hero_description: 'Verpassen Sie nie wieder die Abfallentsorgungszeiten. Diese App bietet Echtzeit-Informationen darüber, wann Sie verschiedene Arten von Abfall in ihre jeweiligen Gemeinschaftsbehälter in Xàbia/Javea entsorgen können, um Ihnen zu helfen, Bußgelder zu vermeiden und zu einer saubereren Umwelt beizutragen.',
@@ -527,7 +527,7 @@ const I18N = {
     tomorrow_label: 'Demain',
     yesterday_label: 'Hier',
     add_to_home: 'Ajouter à l\'écran d\'accueil',
-    ios_install_hint: 'Appuyez sur le bouton partager puis "Ajouter à l\'écran d\'accueil"',
+    ios_install_hint: 'Obtenez l\'expérience complète avec accès hors ligne, mises à jour instantanées et accès rapide aux horaires de déchets. Appuyez sur le bouton partager puis "Ajouter à l\'écran d\'accueil"',
     got_it: 'Compris',
     hero_title: 'Gestion Intelligente des Déchets pour Xàbia/Javea',
     hero_description: 'Ne manquez plus jamais les horaires d\'élimination des déchets. Cette application fournit des informations en temps réel sur quand vous pouvez déposer différents types de déchets dans leurs conteneurs communaux respectifs à Xàbia/Javea, vous aidant à éviter les amendes et à contribuer à un environnement plus propre.',
@@ -573,7 +573,7 @@ const I18N = {
     tomorrow_label: 'Morgen',
     yesterday_label: 'Gisteren',
     add_to_home: 'Toevoegen aan startscherm',
-    ios_install_hint: 'Tik op de deel-knop en dan "Toevoegen aan startscherm"',
+    ios_install_hint: 'Krijg de volledige ervaring met offline toegang, directe updates en snelle toegang tot afvalroosters. Tik op de deel-knop en dan "Toevoegen aan startscherm"',
     got_it: 'Begrepen',
     hero_title: 'Slimme Afvalbeheer voor Xàbia/Javea',
     hero_description: 'Mis nooit meer de afvalverwijderingstijden. Deze app biedt real-time informatie over wanneer u verschillende soorten afval kunt deponeren in hun respectievelijke gemeenschappelijke containers in Xàbia/Javea, om u te helpen boetes te vermijden en bij te dragen aan een schonere omgeving.',
