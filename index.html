@@ -244,118 +244,139 @@
         <!-- Hero Information Section -->
         <section class="hero-info">
           <div class="hero-content">
-            <h2 class="hero-title">Smart Waste Management for Xàbia/Javea</h2>
-            <p class="hero-description">
-              Never miss your waste disposal times again. This app provides real-time information about when you can put different types of waste in their respective communal bins in Xàbia/Javea, helping you avoid fines and contribute to a cleaner environment.
-            </p>
+                          <div class="hero-left">
+                <h2 class="hero-title" data-i18n="hero_title">Smart Waste Management for Xàbia/Javea</h2>
+                <p class="hero-description" data-i18n="hero_description">
+                  Never miss your waste disposal times again. This app provides real-time information about when you can put different types of waste in their respective communal bins in Xàbia/Javea, helping you avoid fines and contribute to a cleaner environment.
+                </p>
+                
+                <!-- Quick Navigation -->
+                <div class="quick-nav">
+                  <a href="#waste-tool" class="nav-btn primary" data-i18n="check_waste_times">Check Waste Times Now</a>
+                  <a href="#waste-info" class="nav-btn secondary" data-i18n="learn_waste_types">Learn About Waste Types</a>
+                </div>
+              </div>
             
-            <!-- Quick Navigation -->
-            <div class="quick-nav">
-              <a href="#waste-tool" class="nav-btn primary">Check Waste Times Now</a>
-              <a href="#waste-info" class="nav-btn secondary">Learn About Waste Types</a>
-            </div>
-            
-                          <div class="info-cards">
+            <div class="hero-right">
+              <div class="info-cards">
                 <div class="info-card">
                   <div class="info-icon">🕒</div>
-                  <h3>Real-Time Schedule</h3>
-                  <p>Check current waste disposal times instantly, with seasonal adjustments for summer and winter schedules.</p>
+                  <div>
+                    <h3 data-i18n="real_time_schedule">Real-Time Schedule</h3>
+                    <p data-i18n="real_time_schedule_desc">Check current waste disposal times instantly, with seasonal adjustments for summer and winter schedules.</p>
+                  </div>
                 </div>
                 
                 <div class="info-card">
                   <div class="info-icon">♻️</div>
-                  <h3>Proper Recycling</h3>
-                  <p>Learn about different waste types and their specific disposal times to ensure proper recycling.</p>
+                  <div>
+                    <h3 data-i18n="proper_recycling">Proper Recycling</h3>
+                    <p data-i18n="proper_recycling_desc">Learn about different waste types and their specific disposal times to ensure proper recycling.</p>
+                  </div>
                 </div>
                 
                 <div class="info-card">
                   <div class="info-icon">💰</div>
-                  <h3>Avoid Fines</h3>
-                  <p>Municipal regulations require specific timing for waste disposal. This app helps you comply and avoid penalties.</p>
+                  <div>
+                    <h3 data-i18n="avoid_fines">Avoid Fines</h3>
+                    <p data-i18n="avoid_fines_desc">Municipal regulations require specific timing for waste disposal. This app helps you comply and avoid penalties.</p>
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
             
             <div class="waste-types-info" id="waste-info">
-              <h3>Waste Disposal Types</h3>
+              <h3 data-i18n="waste_disposal_types">Waste Disposal Types</h3>
               <div class="accordion">
                 <div class="accordion-item">
                   <button class="accordion-header">
                     <svg class="waste-type-icon" aria-hidden="true"><use href="#i-organic"></use></svg>
-                    <span>Organic Waste</span>
+                    <span data-i18n="organic_waste">Organic Waste</span>
                     <svg class="accordion-arrow" viewBox="0 0 24 24" width="16" height="16">
                       <path fill="currentColor" d="M7 10l5 5 5-5z"/>
                     </svg>
                   </button>
                   <div class="accordion-content">
-                    <p>Food scraps, garden waste, and biodegradable materials. Collected bi-weekly with specific time windows.</p>
+                    <p data-i18n="organic_waste_desc">Food scraps, garden waste, and biodegradable materials. Collected bi-weekly with specific time windows.</p>
                   </div>
                 </div>
                 
                 <div class="accordion-item">
                   <button class="accordion-header">
                     <svg class="waste-type-icon" aria-hidden="true"><use href="#i-other"></use></svg>
-                    <span>General Waste</span>
+                    <span data-i18n="general_waste">General Waste</span>
                     <svg class="accordion-arrow" viewBox="0 0 24 24" width="16" height="16">
                       <path fill="currentColor" d="M7 10l5 5 5-5z"/>
                     </svg>
                   </button>
                   <div class="accordion-content">
-                    <p>Non-recyclable household waste. Daily collection with evening time restrictions.</p>
+                    <p data-i18n="general_waste_desc">Non-recyclable household waste. Daily collection with evening time restrictions.</p>
                   </div>
                 </div>
                 
                 <div class="accordion-item">
                   <button class="accordion-header">
                     <svg class="waste-type-icon" aria-hidden="true"><use href="#i-glass"></use></svg>
-                    <span>Glass Containers</span>
+                    <span data-i18n="glass_containers">Glass Containers</span>
                     <svg class="accordion-arrow" viewBox="0 0 24 24" width="16" height="16">
                       <path fill="currentColor" d="M7 10l5 5 5-5z"/>
                     </svg>
                   </button>
                   <div class="accordion-content">
-                    <p>Glass bottles and jars. Available 24/7 except during quiet hours (23:00-08:00).</p>
+                    <p data-i18n="glass_containers_desc">Glass bottles and jars. Available 24/7 except during quiet hours (23:00-08:00).</p>
                   </div>
                 </div>
                 
                 <div class="accordion-item">
                   <button class="accordion-header">
                     <svg class="waste-type-icon" aria-hidden="true"><use href="#i-recycle"></use></svg>
-                    <span>Recyclables</span>
+                    <span data-i18n="recyclables">Recyclables</span>
                     <svg class="accordion-arrow" viewBox="0 0 24 24" width="16" height="16">
                       <path fill="currentColor" d="M7 10l5 5 5-5z"/>
                     </svg>
                   </button>
                   <div class="accordion-content">
-                    <p>Paper, cardboard, plastic, and metal containers. Available anytime for your convenience.</p>
+                    <p data-i18n="recyclables_desc">Paper, cardboard, plastic, and metal containers. Available anytime for your convenience.</p>
                   </div>
                 </div>
                 
                 <div class="accordion-item">
                   <button class="accordion-header">
                     <svg class="waste-type-icon" aria-hidden="true"><use href="#i-bulky"></use></svg>
-                    <span>Bulky Items</span>
+                    <span data-i18n="bulky_items">Bulky Items</span>
                     <svg class="accordion-arrow" viewBox="0 0 24 24" width="16" height="16">
                       <path fill="currentColor" d="M7 10l5 5 5-5z"/>
                     </svg>
                   </button>
                   <div class="accordion-content">
-                    <p>Large items, furniture, and electronics. Must be taken to Ecoparc during operating hours.</p>
+                    <p data-i18n="bulky_items_desc">Large items, furniture, and electronics. Must be taken to Ecoparc during operating hours.</p>
                   </div>
                 </div>
               </div>
             </div>
             
             <div class="location-info">
-              <h3>About Xàbia/Javea</h3>
-              <p>
-                Xàbia (Valencian) or Javea (Spanish) is a coastal municipality in the Marina Alta region of Alicante, Spain. 
-                With a population of over 27,000 residents and a significant international community, the town has implemented 
-                strict waste management regulations to maintain its beautiful Mediterranean environment and comply with EU recycling targets.
-              </p>
-              <p>
-                The municipality operates an advanced waste collection system with specific timing requirements to minimize 
-                environmental impact and ensure efficient collection services for residents and visitors alike.
-              </p>
+              <h3 data-i18n="about_xabia">About Xàbia/Javea</h3>
+              <div class="location-content">
+                <p data-i18n="about_xabia_desc">
+                  Xàbia (Valencian) or Javea (Spanish) is a coastal municipality in the Marina Alta region of Alicante, Spain. 
+                  With a population of over 27,000 residents and a significant international community, the town has implemented 
+                  strict waste management regulations to maintain its beautiful Mediterranean environment and comply with EU recycling targets.
+                </p>
+                <div class="location-expanded" style="display: none;">
+                  <p data-i18n="about_xabia_expanded">
+                    The municipality operates an advanced waste collection system with specific timing requirements to minimize 
+                    environmental impact and ensure efficient collection services for residents and visitors alike.
+                  </p>
+                </div>
+                <button class="show-more-btn" onclick="toggleLocationInfo()">
+                  <span class="show-more-text" data-i18n="show_more">Show more</span>
+                  <svg class="show-more-arrow" viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor" d="M7 10l5 5 5-5z"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </section>

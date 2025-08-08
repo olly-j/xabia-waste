@@ -43,6 +43,12 @@ body{
   overflow-x: hidden;
 }
 
+/* Scroll offset for fixed header */
+html {
+  scroll-padding-top: 80px;
+  scroll-behavior: smooth;
+}
+
 /* Liquid glass background */
 body::before {
   content: '';
@@ -629,7 +635,7 @@ h1{
 
 .info-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   margin-bottom: 32px;
 }
@@ -639,8 +645,11 @@ h1{
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 20px;
-  text-align: center;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
 }
 
 .info-card:hover {
@@ -650,12 +659,13 @@ h1{
 
 .info-icon {
   font-size: 32px;
-  margin-bottom: 12px;
-  display: block;
+  flex-shrink: 0;
+  width: 48px;
+  text-align: center;
 }
 
 .info-card h3 {
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   font-size: 18px;
   font-weight: 600;
   color: var(--text);
@@ -780,6 +790,36 @@ h1{
 
 .location-info p:last-child {
   margin-bottom: 0;
+}
+
+.show-more-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0;
+  transition: all 0.3s ease;
+}
+
+.show-more-btn:hover {
+  color: var(--primary-light);
+}
+
+.show-more-arrow {
+  transition: transform 0.3s ease;
+}
+
+.location-info.expanded .show-more-arrow {
+  transform: rotate(180deg);
+}
+
+.location-expanded {
+  margin-top: 12px;
 }
 
 .app-footer{
@@ -1057,22 +1097,24 @@ h1{
     font-size: 13px;
   }
   
-  /* Responsive ad sizing */
+  
+
+/* Responsive ad sizing */
+.ad-container {
+  margin: 16px 0;
+  padding: 12px;
+}
+
+.ad-container ins {
+  min-height: 60px;
+}
+
+/* Hide ads on very small screens */
+@media (max-width: 320px) {
   .ad-container {
-    margin: 16px 0;
-    padding: 12px;
+    display: none;
   }
-  
-  .ad-container ins {
-    min-height: 60px;
-  }
-  
-  /* Hide ads on very small screens */
-  @media (max-width: 320px) {
-    .ad-container {
-      display: none;
-    }
-  }
+}
 }
 
 /* Responsive adjustments for iOS prompt */
