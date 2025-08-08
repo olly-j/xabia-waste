@@ -2,19 +2,76 @@
 
 // PWA install prompt handling
 let deferredPrompt = null;
+let installButton = null;
+
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  const btn = document.getElementById('btn-install');
-  if (btn) btn.style.display = 'flex';
+  installButton = document.getElementById('btn-install');
+  if (installButton) {
+    installButton.style.display = 'flex';
+    installButton.addEventListener('click', handleInstallClick);
+  }
 });
 
-document.getElementById('btn-install')?.addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-});
+// Handle iOS Safari install
+function handleIOSInstall() {
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+  
+  if (isIOS && isSafari) {
+    showIOSInstallPrompt();
+  }
+}
+
+function showIOSInstallPrompt() {
+  const prompt = document.createElement('div');
+  prompt.className = 'ios-install-prompt';
+  prompt.innerHTML = `
+    <div class="ios-install-content">
+      <div class="ios-install-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2v10.6l3.3-3.3l1.4 1.4L12 16.4L7.3 10.7l1.4-1.4L12 12.6V2h0ZM5 20h14v2H5v-2Z"/>
+        </svg>
+      </div>
+      <h3>Add to Home Screen</h3>
+      <p>Tap the share button <span class="share-icon">⎋</span> then "Add to Home Screen"</p>
+      <button class="ios-install-close">Got it</button>
+    </div>
+  `;
+  
+  document.body.appendChild(prompt);
+  
+  // Animate in
+  setTimeout(() => prompt.classList.add('show'), 100);
+  
+  // Close button
+  prompt.querySelector('.ios-install-close').addEventListener('click', () => {
+    prompt.classList.remove('show');
+    setTimeout(() => prompt.remove(), 300);
+  });
+  
+  // Auto-hide after 8 seconds
+  setTimeout(() => {
+    if (prompt.parentNode) {
+      prompt.classList.remove('show');
+      setTimeout(() => prompt.remove(), 300);
+    }
+  }, 8000);
+}
+
+async function handleInstallClick() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    deferredPrompt = null;
+    if (installButton) installButton.style.display = 'none';
+  } else {
+    // Fallback for iOS Safari
+    handleIOSInstall();
+  }
+}
 
 // Service worker registration
 if ('serviceWorker' in navigator) {
@@ -43,6 +100,9 @@ const I18N = {
     today_label: 'Today',
     tomorrow_label: 'Tomorrow',
     yesterday_label: 'Yesterday',
+    add_to_home: 'Add to Home Screen',
+    ios_install_hint: 'Tap the share button then "Add to Home Screen"',
+    got_it: 'Got it',
   },
   es: {
     install: 'Instalar',
@@ -62,6 +122,9 @@ const I18N = {
     today_label: 'Hoy',
     tomorrow_label: 'Mañana',
     yesterday_label: 'Ayer',
+    add_to_home: 'Añadir a Pantalla de Inicio',
+    ios_install_hint: 'Toca el botón compartir y luego "Añadir a Pantalla de Inicio"',
+    got_it: 'Entendido',
   },
   va: {
     install: 'Instal·lar',
@@ -81,6 +144,9 @@ const I18N = {
     today_label: 'Hui',
     tomorrow_label: 'Demà',
     yesterday_label: 'Ahir',
+    add_to_home: 'Afegir a Pantalla d\'Inici',
+    ios_install_hint: 'Toca el botó compartir i després "Afegir a Pantalla d\'Inici"',
+    got_it: 'Entès',
   }
 };
 
@@ -113,26 +179,28 @@ function getStatuses(at) {
   const summer = isSummer(at);
   const statuses = [];
 
-  // Organic & Other
+  // Organic & Other - DIFFERENT RULES FOR SUMMER vs WINTER
   if (summer) {
+    // Summer: May 1 - Sep 30: 21:00-24:00
     const allowed = isWithin(at, 21, 0, 24, 0);
-    statuses.push({ type: WasteType.ORGANIC, allowed, mode: 'window' });
-    statuses.push({ type: WasteType.OTHER, allowed, mode: 'window' });
+    statuses.push({ type: WasteType.ORGANIC, allowed, mode: 'window', season: 'summer' });
+    statuses.push({ type: WasteType.OTHER, allowed, mode: 'window', season: 'summer' });
   } else {
+    // Winter: Oct 1 - Apr 30: 19:00-24:00
     const allowed = isWithin(at, 19, 0, 24, 0);
-    statuses.push({ type: WasteType.ORGANIC, allowed, mode: 'window' });
-    statuses.push({ type: WasteType.OTHER, allowed, mode: 'window' });
+    statuses.push({ type: WasteType.ORGANIC, allowed, mode: 'window', season: 'winter' });
+    statuses.push({ type: WasteType.OTHER, allowed, mode: 'window', season: 'winter' });
   }
 
-  // Glass: not allowed 23:00–08:00
+  // Glass: not allowed 23:00–08:00 (same all year)
   const glassAllowed = !isWithin(at, 23, 0, 8, 0);
   statuses.push({ type: WasteType.GLASS, allowed: glassAllowed, mode: 'curfew' });
 
-  // Recyclables anytime
+  // Recyclables anytime (same all year)
   statuses.push({ type: WasteType.RECYCLABLES, allowed: true, mode: 'always' });
 
-  // Bulky: check (ecoparc hours vary)
-  statuses.push({ type: WasteType.BULKY, allowed: false, mode: 'check' });
+  // Bulky: check (ecoparc hours vary by season)
+  statuses.push({ type: WasteType.BULKY, allowed: false, mode: 'check', season: summer ? 'summer' : 'winter' });
 
   return { summer, statuses };
 }
@@ -164,15 +232,6 @@ function formatDate(d) {
     day: 'numeric' 
   });
 }
-
-// Official source links for details per waste type
-const DETAILS_URL = {
-  [WasteType.ORGANIC]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
-  [WasteType.OTHER]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
-  [WasteType.GLASS]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
-  [WasteType.RECYCLABLES]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
-  [WasteType.BULKY]: 'https://www.ajxabia.com/ver/1282/ecoparc.html',
-};
 
 function renderSeasonBadge(summer) {
   const el = document.getElementById('season-badge');
@@ -234,6 +293,15 @@ function translateWasteLabel(label) {
   };
   return map[lang][label] || label;
 }
+
+// Official source links for details per waste type
+const DETAILS_URL = {
+  [WasteType.ORGANIC]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
+  [WasteType.OTHER]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
+  [WasteType.GLASS]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
+  [WasteType.RECYCLABLES]: 'https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/',
+  [WasteType.BULKY]: 'https://www.ajxabia.com/ver/1282/ecoparc.html',
+};
 
 function renderWasteList(at) {
   const { summer, statuses } = getStatuses(at);
@@ -384,8 +452,24 @@ document.getElementById('chat-form').addEventListener('submit', (e) => {
   input.value = '';
 });
 
+// Show iOS install prompt on first visit
+function checkFirstVisit() {
+  const hasVisited = localStorage.getItem('hasVisited');
+  if (!hasVisited) {
+    localStorage.setItem('hasVisited', 'true');
+    setTimeout(() => {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+      if (isIOS && isSafari) {
+        showIOSInstallPrompt();
+      }
+    }, 2000); // Show after 2 seconds
+  }
+}
+
 // Initial
 applyI18n();
 updateAll();
+checkFirstVisit();
 
 
