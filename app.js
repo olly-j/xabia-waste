@@ -1,6 +1,15 @@
+/**
+ * Xàbia Waste Management App
+ * Real-time waste collection schedule for Xàbia/Javea, Spain
+ * @author Olly Jeffers
+ * @version 1.0.0
+ */
+
 /* eslint-disable no-console */
 
-// Analytics tracking functions
+// ============================================================================
+// ANALYTICS & TRACKING
+// ============================================================================
 function trackEvent(category, action, label = null, value = null) {
   if (typeof gtag !== 'undefined') {
     gtag('event', action, {
@@ -11,6 +20,26 @@ function trackEvent(category, action, label = null, value = null) {
       custom_parameter_2: 'javea_xabia'
     });
   }
+}
+
+// Cache DOM elements for better performance
+const domCache = {
+  timeElement: null,
+  dateElement: null,
+  sliderElement: null,
+  wasteListElement: null,
+  currentTimeElement: null,
+  currentDateElement: null
+};
+
+// Initialize DOM cache
+function initDOMCache() {
+  domCache.timeElement = document.getElementById('current-time');
+  domCache.dateElement = document.getElementById('current-date');
+  domCache.sliderElement = document.getElementById('time-slider');
+  domCache.wasteListElement = document.getElementById('waste-list');
+  domCache.currentTimeElement = document.getElementById('current-time');
+  domCache.currentDateElement = document.getElementById('current-date');
 }
 
 function trackPageView(pageTitle = null) {
@@ -953,7 +982,13 @@ function initAccordion() {
     const header = item.querySelector('.accordion-header');
     const content = item.querySelector('.accordion-content');
     
-    header.addEventListener('click', () => {
+    if (!header) return;
+    
+    // Remove existing listeners to prevent memory leaks
+    header.removeEventListener('click', handleAccordionClick);
+    header.addEventListener('click', handleAccordionClick);
+    
+    function handleAccordionClick() {
       const isActive = item.classList.contains('active');
       
       // Close all other items
@@ -965,61 +1000,90 @@ function initAccordion() {
       if (!isActive) {
         item.classList.add('active');
       }
-    });
+    }
   });
 }
 
 // Show more functionality for location info
 function toggleLocationInfo() {
-  const locationInfo = document.querySelector('.location-info');
-  const expandedContent = document.querySelector('.location-expanded');
-  const continuedText = document.querySelector('.location-text-continued');
-  const showMoreBtn = document.querySelector('.show-more-btn');
-  const showMoreText = document.querySelector('.show-more-text');
-  const showMoreArrow = document.querySelector('.show-more-arrow');
-  
-  const isExpanded = locationInfo.classList.contains('expanded');
-  
-  if (isExpanded) {
-    locationInfo.classList.remove('expanded');
-    expandedContent.style.display = 'none';
-    continuedText.style.display = 'none';
-    showMoreText.textContent = t('show_more');
-  } else {
-    locationInfo.classList.add('expanded');
-    expandedContent.style.display = 'block';
-    continuedText.style.display = 'inline';
-    showMoreText.textContent = t('show_less');
+  try {
+    const locationInfo = document.querySelector('.location-info');
+    const expandedContent = document.querySelector('.location-expanded');
+    const continuedText = document.querySelector('.location-text-continued');
+    const showMoreBtn = event.target.closest('.show-more-btn');
+    
+    if (!locationInfo || !expandedContent || !continuedText || !showMoreBtn) {
+      console.error('Required elements not found for toggleLocationInfo');
+      return;
+    }
+    
+    const showMoreText = showMoreBtn.querySelector('.show-more-text');
+    const showMoreArrow = showMoreBtn.querySelector('.show-more-arrow');
+    
+    if (!showMoreText) {
+      console.error('Show more text element not found');
+      return;
+    }
+    
+    const isExpanded = locationInfo.classList.contains('expanded');
+    
+    if (isExpanded) {
+      locationInfo.classList.remove('expanded');
+      expandedContent.style.display = 'none';
+      continuedText.style.display = 'none';
+      showMoreText.textContent = t('show_more');
+    } else {
+      locationInfo.classList.add('expanded');
+      expandedContent.style.display = 'block';
+      continuedText.style.display = 'inline';
+      showMoreText.textContent = t('show_less');
+    }
+  } catch (error) {
+    console.error('Error in toggleLocationInfo:', error);
   }
+}
+
+// Performance monitoring
+function measurePerformance(label, fn) {
+  const start = performance.now();
+  const result = fn();
+  const end = performance.now();
+  console.log(`${label}: ${(end - start).toFixed(2)}ms`);
+  return result;
 }
 
 // Simple initialization that runs immediately
 function initializeApp() {
-  console.log('Starting app initialization...');
-  
-  // Check if elements exist
-  const timeElement = document.getElementById('current-time');
-  const dateElement = document.getElementById('current-date');
-  const sliderElement = document.getElementById('time-slider');
-  const wasteListElement = document.getElementById('waste-list');
-  
-  console.log('Elements found:', {
-    timeElement: !!timeElement,
-    dateElement: !!dateElement,
-    sliderElement: !!sliderElement,
-    wasteListElement: !!wasteListElement
+  measurePerformance('App Initialization', () => {
+    console.log('Starting app initialization...');
+    
+    // Initialize DOM cache
+    initDOMCache();
+    
+    // Check if elements exist
+    const timeElement = domCache.timeElement;
+    const dateElement = domCache.dateElement;
+    const sliderElement = domCache.sliderElement;
+    const wasteListElement = domCache.wasteListElement;
+    
+    console.log('Elements found:', {
+      timeElement: !!timeElement,
+      dateElement: !!dateElement,
+      sliderElement: !!sliderElement,
+      wasteListElement: !!wasteListElement
+    });
+    
+    if (timeElement && dateElement && sliderElement && wasteListElement) {
+      applyI18n();
+      updateAll();
+      checkIOSInstall();
+      initAccordion();
+      console.log('Initialization complete');
+    } else {
+      console.error('Some elements not found, retrying in 100ms...');
+      setTimeout(initializeApp, 100);
+    }
   });
-  
-  if (timeElement && dateElement && sliderElement && wasteListElement) {
-    applyI18n();
-    updateAll();
-    checkIOSInstall();
-    initAccordion();
-    console.log('Initialization complete');
-  } else {
-    console.error('Some elements not found, retrying in 100ms...');
-    setTimeout(initializeApp, 100);
-  }
 }
 
 // Run initialization

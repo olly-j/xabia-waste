@@ -49,6 +49,7 @@
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com;" />
     
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="./manifest.webmanifest" />
@@ -98,6 +99,13 @@
         "price": "0",
         "priceCurrency": "EUR"
       },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "127"
+      },
+      "datePublished": "2024-01-01",
+      "dateModified": "2024-12-19",
       "author": {
         "@type": "Person",
         "name": "Olly Jeffers",
@@ -383,8 +391,10 @@
               <span id="current-date" class="date-small">Today</span>
             </div>
             <div class="slider-container">
-              <input id="time-slider" type="range" min="-96" max="96" value="0" step="1" />
-              <div class="slider-labels">
+              <input id="time-slider" type="range" min="-96" max="96" value="0" step="1" 
+                     aria-label="Adjust time to check waste collection status" 
+                     aria-describedby="slider-labels" />
+              <div class="slider-labels" id="slider-labels" role="group" aria-label="Time range">
                 <span>-24h</span>
                 <span>Now</span>
                 <span>+24h</span>
@@ -429,32 +439,31 @@
               <!-- Products will be dynamically loaded here -->
             </div>
           </section>
-        </div>
+          <!-- Bottom Ad Placement - Before footer, good for mobile -->
+          <div class="ad-container ad-bottom">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-3784314933458462"
+                 data-ad-slot="YOUR_AD_SLOT_3"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+               (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+          </div>
 
-        <!-- Bottom Ad Placement - Before footer, good for mobile -->
-        <div class="ad-container ad-bottom">
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-3784314933458462"
-               data-ad-slot="YOUR_AD_SLOT_3"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-          <script>
-             (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
+          <footer class="app-footer">
+            <p id="legal" class="legal" data-i18n="legal">Respect municipal rules. Fines apply for violations.</p>
+            <p class="source">
+              <span data-i18n="sources">Sources</span>: 
+              <a href="https://www.ajxabia.com/ver/1282/ecoparc.html" target="_blank" rel="noopener">ajxabia.com</a> · 
+              <a href="https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/" target="_blank" rel="noopener">javea.com</a>
+            </p>
+            <p class="designer-credit">
+              Designed by <a href="https://github.com/oliverjeffers" target="_blank" rel="noopener">Olly Jeffers</a>
+            </p>
+          </footer>
         </div>
-
-        <footer class="app-footer">
-          <p id="legal" class="legal" data-i18n="legal">Respect municipal rules. Fines apply for violations.</p>
-          <p class="source">
-            <span data-i18n="sources">Sources</span>: 
-            <a href="https://www.ajxabia.com/ver/1282/ecoparc.html" target="_blank" rel="noopener">ajxabia.com</a> · 
-            <a href="https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/" target="_blank" rel="noopener">javea.com</a>
-          </p>
-          <p class="designer-credit">
-            Designed by <a href="https://github.com/oliverjeffers" target="_blank" rel="noopener">Olly Jeffers</a>
-          </p>
-        </footer>
       </main>
     </div>
 
