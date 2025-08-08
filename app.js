@@ -46,11 +46,6 @@ function trackInstallAttempt(outcome) {
   trackEvent('PWA', 'install_attempt', outcome);
 }
 
-// Track chat usage
-function trackChatUsage(command) {
-  trackEvent('Chat', 'command', command);
-}
-
 // SEO: Update page title and meta description dynamically
 function updatePageSEO(timeInfo, language) {
   const timeStr = formatTimeHHMM(timeInfo);
@@ -160,8 +155,6 @@ const I18N = {
     now: 'Now',
     legal: 'Respect municipal rules. Fines apply for violations.',
     sources: 'Sources',
-    chat_title: 'Chat',
-    chat_hint: 'Try: now, +3h, at 21:00, on 2025-09-15 22:30, lang es',
     season_summer: 'Summer',
     season_winter: 'Winter',
     status_allowed: 'Allowed',
@@ -182,8 +175,6 @@ const I18N = {
     now: 'Ahora',
     legal: 'Respete las normas municipales. Las infracciones conllevan multas.',
     sources: 'Fuentes',
-    chat_title: 'Chat',
-    chat_hint: 'Prueba: ahora, +3h, a las 21:00, el 2025-09-15 22:30, lang en',
     season_summer: 'Verano',
     season_winter: 'Invierno',
     status_allowed: 'Permitido',
@@ -204,8 +195,6 @@ const I18N = {
     now: 'Ara',
     legal: "Respecteu les normes municipals. Les infraccions comporten multes.",
     sources: 'Fonts',
-    chat_title: 'Xat',
-    chat_hint: 'Prova: ara, +3h, a les 21:00, el 2025-09-15 22:30, lang es',
     season_summer: 'Estiu',
     season_winter: 'Hivern',
     status_allowed: 'Permés',
@@ -220,6 +209,66 @@ const I18N = {
     add_to_home: 'Afegir a Pantalla d\'Inici',
     ios_install_hint: 'Toca el botó compartir i després "Afegir a Pantalla d\'Inici"',
     got_it: 'Entès',
+  },
+  de: {
+    install: 'Installieren',
+    now: 'Jetzt',
+    legal: 'Respektieren Sie die kommunalen Vorschriften. Verstöße werden mit Bußgeldern geahndet.',
+    sources: 'Quellen',
+    season_summer: 'Sommer',
+    season_winter: 'Winter',
+    status_allowed: 'Erlaubt',
+    status_not_allowed: 'Nicht erlaubt',
+    status_check: 'Stunden prüfen',
+    status_always: 'Immer erlaubt',
+    preview: 'Vorschau',
+    more_details: 'Weitere Details',
+    today_label: 'Heute',
+    tomorrow_label: 'Morgen',
+    yesterday_label: 'Gestern',
+    add_to_home: 'Zum Startbildschirm hinzufügen',
+    ios_install_hint: 'Tippen Sie auf die Teilen-Schaltfläche und dann "Zum Startbildschirm hinzufügen"',
+    got_it: 'Verstanden',
+  },
+  fr: {
+    install: 'Installer',
+    now: 'Maintenant',
+    legal: 'Respectez les règles municipales. Les infractions sont passibles d\'amendes.',
+    sources: 'Sources',
+    season_summer: 'Été',
+    season_winter: 'Hiver',
+    status_allowed: 'Autorisé',
+    status_not_allowed: 'Non autorisé',
+    status_check: 'Vérifier les heures',
+    status_always: 'Toujours autorisé',
+    preview: 'Aperçu',
+    more_details: 'Plus de détails',
+    today_label: 'Aujourd\'hui',
+    tomorrow_label: 'Demain',
+    yesterday_label: 'Hier',
+    add_to_home: 'Ajouter à l\'écran d\'accueil',
+    ios_install_hint: 'Appuyez sur le bouton partager puis "Ajouter à l\'écran d\'accueil"',
+    got_it: 'Compris',
+  },
+  nl: {
+    install: 'Installeren',
+    now: 'Nu',
+    legal: 'Respecteer de gemeentelijke regels. Overtredingen worden beboet.',
+    sources: 'Bronnen',
+    season_summer: 'Zomer',
+    season_winter: 'Winter',
+    status_allowed: 'Toegestaan',
+    status_not_allowed: 'Niet toegestaan',
+    status_check: 'Controleer uren',
+    status_always: 'Altijd toegestaan',
+    preview: 'Voorvertoning',
+    more_details: 'Meer details',
+    today_label: 'Vandaag',
+    tomorrow_label: 'Morgen',
+    yesterday_label: 'Gisteren',
+    add_to_home: 'Toevoegen aan startscherm',
+    ios_install_hint: 'Tik op de deel-knop en dan "Toevoegen aan startscherm"',
+    got_it: 'Begrepen',
   }
 };
 
@@ -418,7 +467,7 @@ function updateAll() {
 }
 
 const state = {
-  lang: (localStorage.getItem('lang') || (navigator.language?.slice(0,2) ?? 'en')).replace(/^(en|es|va).*/, '$1'),
+  lang: (localStorage.getItem('lang') || (navigator.language?.slice(0,2) ?? 'en')).replace(/^(en|es|va|de|fr|nl).*/, '$1'),
 };
 
 function applyI18n() {
@@ -440,90 +489,15 @@ document.querySelectorAll('.lang-toggle .chip').forEach((btn) => {
     const lang = btn.getAttribute('data-lang');
     state.lang = lang;
     localStorage.setItem('lang', lang);
+    
+    // Track language change
+    trackLanguageChange(lang);
+    
     applyI18n();
   });
 });
 
 document.getElementById('time-slider').addEventListener('input', updateAll);
-
-// Chat logic
-function chatPost(role, textOrHtml, isHtml = false) {
-  const out = document.getElementById('chat-output');
-  const div = document.createElement('div');
-  div.className = `chat-msg ${role}`;
-  if (isHtml) div.innerHTML = textOrHtml; else div.textContent = textOrHtml;
-  out.appendChild(div);
-  out.scrollTop = out.scrollHeight;
-}
-
-function formatStatuses(at) {
-  const { statuses } = getStatuses(at);
-  const parts = statuses.map((s) => {
-    const { label } = statusBadgeProps(s);
-    return `${translateWasteLabel(wasteLabel(s.type))}: ${label}`;
-  });
-  return `${at.toLocaleString()}\n` + parts.join('\n');
-}
-
-function formatStatusesHtml(at) {
-  const { statuses } = getStatuses(at);
-  const rows = statuses.map((s) => {
-    const { label } = statusBadgeProps(s);
-    const name = translateWasteLabel(wasteLabel(s.type));
-    const url = DETAILS_URL[s.type];
-    return `<div><strong>${name}</strong>: ${label} — <a href="${url}" target="_blank" rel="noopener noreferrer">${t('more_details')}</a></div>`;
-  }).join('');
-  return `<div><div>${at.toLocaleString()}</div>${rows}</div>`;
-}
-
-function parseCommand(input) {
-  const trimmed = input.trim().toLowerCase();
-  if (trimmed === 'help' || trimmed === '?') {
-    return { type: 'help' };
-  }
-  if (trimmed === 'now') return { type: 'at', date: new Date() };
-  if (/^\+\d+h$/.test(trimmed)) {
-    const hours = parseInt(trimmed.slice(1), 10);
-    return { type: 'at', date: new Date(Date.now() + hours * 3600_000) };
-  }
-  if (/^at\s+\d{1,2}:\d{2}$/.test(trimmed)) {
-    const [, hhmm] = trimmed.split(/\s+/);
-    const [h, m] = hhmm.split(':').map(Number);
-    const now = new Date();
-    const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
-    return { type: 'at', date: d };
-  }
-  if (/^on\s+\d{4}-\d{2}-\d{2}(\s+\d{2}:\d{2})?$/.test(trimmed)) {
-    const dt = trimmed.replace(/^on\s+/, '');
-    const d = new Date(dt.replace(' ', 'T'));
-    if (!isNaN(d.getTime())) return { type: 'at', date: d };
-  }
-  if (/^lang\s+(en|es|va)$/.test(trimmed)) {
-    const lang = trimmed.split(/\s+/)[1];
-    return { type: 'lang', lang };
-  }
-  return { type: 'unknown' };
-}
-
-document.getElementById('chat-form').addEventListener('submit', (e) => {
-  e.preventDefault();
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text) return;
-  chatPost('user', text);
-  const cmd = parseCommand(text);
-  if (cmd.type === 'help') {
-    chatPost('bot', 'Commands: now | +3h | at 21:00 | on 2025-09-15 22:30 | lang es');
-  } else if (cmd.type === 'lang') {
-    state.lang = cmd.lang; localStorage.setItem('lang', cmd.lang); applyI18n();
-    chatPost('bot', `Lang: ${cmd.lang}`);
-  } else if (cmd.type === 'at') {
-    chatPost('bot', formatStatusesHtml(cmd.date), true);
-  } else {
-    chatPost('bot', 'Unknown. Type help');
-  }
-  input.value = '';
-});
 
 // Show iOS install prompt on first visit
 function checkFirstVisit() {
