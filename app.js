@@ -654,6 +654,9 @@ function renderWasteList(at) {
   
   console.log('Waste list rendered with', statuses.length, 'items');
   
+  // Add info icon under the waste list
+  this.addInfoIcon(ul);
+  
   // Re-render product recommendations after waste list updates
   if (window.amazonAssociates) {
     window.amazonAssociates.renderProductRecommendations();
