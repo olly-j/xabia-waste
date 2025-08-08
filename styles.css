@@ -83,6 +83,25 @@ body::before {
   margin-bottom: 16px;
 }
 
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  filter: drop-shadow(0 2px 8px rgba(11, 92, 255, 0.2));
+  transition: all 0.3s ease;
+}
+
+.app-icon:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 12px rgba(11, 92, 255, 0.3));
+}
+
 h1{
   font-size: 28px;
   font-weight: 700;
@@ -449,6 +468,25 @@ h1{
   text-decoration: underline;
 }
 
+.designer-credit {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--glass-border);
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.designer-credit a {
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.designer-credit a:hover {
+  opacity: 1;
+  text-decoration: none;
+  color: var(--primary-light);
+}
+
 /* iOS Install Prompt */
 .ios-install-prompt {
   position: fixed;
@@ -557,6 +595,19 @@ h1{
   
   .waste-name {
     font-size: 15px;
+  }
+  
+  .app-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  .title-with-icon {
+    gap: 10px;
   }
 }
 

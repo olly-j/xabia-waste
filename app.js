@@ -1,5 +1,75 @@
 /* eslint-disable no-console */
 
+// Analytics tracking functions
+function trackEvent(category, action, label = null, value = null) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', action, {
+      event_category: category,
+      event_label: label,
+      value: value,
+      custom_parameter_1: 'waste_schedule',
+      custom_parameter_2: 'javea_xabia'
+    });
+  }
+}
+
+function trackPageView(pageTitle = null) {
+  if (typeof gtag !== 'undefined') {
+    gtag('config', 'G-XXXXXXXXXX', {
+      page_title: pageTitle || 'Xàbia Waste Schedule',
+      page_location: window.location.href,
+      custom_map: {
+        'custom_parameter_1': 'waste_schedule',
+        'custom_parameter_2': 'javea_xabia'
+      }
+    });
+  }
+}
+
+// Track language changes
+function trackLanguageChange(language) {
+  trackEvent('Language', 'change', language);
+}
+
+// Track time slider usage
+function trackTimeSliderUsage(value) {
+  trackEvent('TimeSlider', 'adjust', `slider_value_${value}`);
+}
+
+// Track waste status views
+function trackWasteStatusView(status, wasteType) {
+  trackEvent('WasteStatus', 'view', `${wasteType}_${status}`);
+}
+
+// Track PWA install attempts
+function trackInstallAttempt(outcome) {
+  trackEvent('PWA', 'install_attempt', outcome);
+}
+
+// Track chat usage
+function trackChatUsage(command) {
+  trackEvent('Chat', 'command', command);
+}
+
+// SEO: Update page title and meta description dynamically
+function updatePageSEO(timeInfo, language) {
+  const timeStr = formatTimeHHMM(timeInfo);
+  const dateStr = formatDate(timeInfo);
+  
+  // Update page title
+  const title = `Xàbia Waste Schedule - ${timeStr} ${dateStr} | Javea Rubbish Collection`;
+  document.title = title;
+  
+  // Update meta description
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    metaDesc.content = `Check what waste you can throw away in Xàbia/Javea at ${timeStr} on ${dateStr}. Real-time rubbish collection schedule and recycling times.`;
+  }
+  
+  // Track page view with updated title
+  trackPageView(title);
+}
+
 // PWA install prompt handling
 let deferredPrompt = null;
 let installButton = null;
@@ -12,6 +82,9 @@ window.addEventListener('beforeinstallprompt', (e) => {
     installButton.style.display = 'flex';
     installButton.addEventListener('click', handleInstallClick);
   }
+  
+  // Track install prompt
+  trackEvent('PWA', 'install_prompt_shown');
 });
 
 // Handle iOS Safari install

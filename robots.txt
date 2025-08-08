@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://xabia-waste.com/sitemap.xml
+
+# Crawl delay (optional - helps with server load)
+Crawl-delay: 1
+
+# Disallow any potential admin or private areas (future-proofing)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+Disallow: /_/
+
+# Allow all important resources
+Allow: /icons/
+Allow: /styles.css
+Allow: /app.js
+Allow: /manifest.webmanifest
+Allow: /service-worker.js

@@ -4,12 +4,190 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b5cff" />
-    <title>Xàbia Waste – PWA</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Xàbia Waste Schedule - Javea Rubbish Collection Times | Real-time Waste Management</title>
+    <meta name="description" content="Find out what waste you can throw away now in Xàbia/Javea. Real-time rubbish collection schedule, recycling times, and waste management rules. Available in English, Spanish, Valencian, German, French, and Dutch." />
+    <meta name="keywords" content="xàbia waste, javea rubbish, xabia bins, javea trash collection, xàbia recycling, javea waste schedule, xabia rubbish times, javea garbage, xàbia waste management, javea recycling schedule, xabia waste rules, javea rubbish collection, xàbia garbage times, javea waste disposal, xabia rubbish schedule, javea waste collection times, xàbia recycling rules, javea garbage collection, xabia waste management javea, javea rubbish disposal" />
+    <meta name="author" content="Olly Jeffers" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://xabia-waste.com/" />
+    <meta property="og:title" content="Xàbia Waste Schedule - Real-time Rubbish Collection Times" />
+    <meta property="og:description" content="Find out what waste you can throw away now in Xàbia/Javea. Real-time rubbish collection schedule and recycling times." />
+    <meta property="og:image" content="https://xabia-waste.com/icons/app-icon-512.png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Xàbia Waste" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://xabia-waste.com/" />
+    <meta property="twitter:title" content="Xàbia Waste Schedule - Real-time Rubbish Collection Times" />
+    <meta property="twitter:description" content="Find out what waste you can throw away now in Xàbia/Javea. Real-time rubbish collection schedule and recycling times." />
+    <meta property="twitter:image" content="https://xabia-waste.com/icons/app-icon-512.png" />
+    
+    <!-- Multi-language Meta Tags -->
+    <link rel="alternate" hreflang="en" href="https://xabia-waste.com/" />
+    <link rel="alternate" hreflang="es" href="https://xabia-waste.com/?lang=es" />
+    <link rel="alternate" hreflang="ca" href="https://xabia-waste.com/?lang=va" />
+    <link rel="alternate" hreflang="de" href="https://xabia-waste.com/?lang=de" />
+    <link rel="alternate" hreflang="fr" href="https://xabia-waste.com/?lang=fr" />
+    <link rel="alternate" hreflang="nl" href="https://xabia-waste.com/?lang=nl" />
+    <link rel="alternate" hreflang="x-default" href="https://xabia-waste.com/" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+    
+    <!-- PWA Meta Tags -->
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icons/app-icon.svg" type="image/svg+xml" />
-    <meta name="description" content="What waste can I throw away now in Xàbia? Time-based rules, seasons, i18n. Offline PWA." />
     <link rel="apple-touch-icon" href="./icons/app-icon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Xàbia Waste" />
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="./styles.css" as="style" />
+    <link rel="preload" href="./app.js" as="script" />
+    <link rel="preload" href="./icons/app-icon.svg" as="image" />
+    
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="./styles.css" />
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX', {
+        page_title: 'Xàbia Waste Schedule',
+        page_location: window.location.href,
+        custom_map: {
+          'custom_parameter_1': 'waste_schedule',
+          'custom_parameter_2': 'javea_xabia'
+        }
+      });
+    </script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Xàbia Waste Schedule",
+      "alternateName": "Javea Rubbish Collection Times",
+      "description": "Real-time waste management and rubbish collection schedule for Xàbia/Javea, Spain. Find out what waste you can throw away now with time-based rules and seasonal schedules.",
+      "url": "https://xabia-waste.com/",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Olly Jeffers",
+        "url": "https://github.com/oliverjeffers"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Xàbia Waste",
+        "url": "https://xabia-waste.com/"
+      },
+      "location": {
+        "@type": "Place",
+        "name": "Xàbia/Javea",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Xàbia",
+          "addressRegion": "Alicante",
+          "addressCountry": "ES"
+        }
+      },
+      "keywords": "xàbia waste, javea rubbish, xabia bins, javea trash collection, xàbia recycling, javea waste schedule, xabia rubbish times, javea garbage, xàbia waste management, javea recycling schedule, xabia waste rules, javea rubbish collection, xàbia garbage times, javea waste disposal, xabia rubbish schedule, javea waste collection times, xàbia recycling rules, javea garbage collection, xabia waste management javea, javea rubbish disposal",
+      "inLanguage": ["en", "es", "ca", "de", "fr", "nl"],
+      "screenshot": "https://xabia-waste.com/icons/app-icon-512.png",
+      "softwareVersion": "1.0.0",
+      "featureList": [
+        "Real-time waste collection schedule",
+        "Multi-language support",
+        "Time-based waste rules",
+        "Seasonal schedules",
+        "Offline functionality",
+        "Progressive Web App"
+      ]
+    }
+    </script>
+    
+    <!-- Local Business Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Xàbia Waste Management",
+      "description": "Municipal waste collection and recycling services in Xàbia/Javea, Spain",
+      "url": "https://xabia-waste.com/",
+      "telephone": "+34-965-790-000",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Plaza Mayor",
+        "addressLocality": "Xàbia",
+        "addressRegion": "Alicante",
+        "postalCode": "03730",
+        "addressCountry": "ES"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "38.7895",
+        "longitude": "0.1667"
+      },
+      "openingHours": "Mo-Su 00:00-23:59",
+      "serviceArea": {
+        "@type": "City",
+        "name": "Xàbia/Javea"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Waste Collection Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Organic Waste Collection",
+              "description": "Bi-weekly organic waste collection"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Recycling Collection",
+              "description": "Weekly recycling collection"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "General Waste Collection",
+              "description": "Daily general waste collection"
+            }
+          }
+        ]
+      }
+    }
+    </script>
   </head>
   <body>
     <div class="glass-container">
@@ -36,7 +214,10 @@
 
       <header class="app-header">
         <div class="title-row">
-          <h1 id="app-title">Xàbia Waste</h1>
+          <div class="title-with-icon">
+            <img src="./icons/app-icon.svg" alt="Xàbia Waste" class="app-icon" />
+            <h1 id="app-title">Xàbia Waste</h1>
+          </div>
           <span id="season-badge" class="badge badge-season">–</span>
         </div>
         <div class="controls-row">
@@ -91,6 +272,9 @@
           <span data-i18n="sources">Sources</span>: 
           <a href="https://www.ajxabia.com/ver/1282/ecoparc.html" target="_blank" rel="noopener">ajxabia.com</a> · 
           <a href="https://www.javea.com/en/xabia-actualiza-los-horarios-para-tirar-la-basura-y-advierte-habra-sanciones/" target="_blank" rel="noopener">javea.com</a>
+        </p>
+        <p class="designer-credit">
+          Designed by <a href="https://github.com/oliverjeffers" target="_blank" rel="noopener">Olly Jeffers</a>
         </p>
       </footer>
     </div>
